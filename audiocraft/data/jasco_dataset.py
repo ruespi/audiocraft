@@ -17,6 +17,7 @@ from .audio_dataset import load_audio_meta
 from ..modules.conditioners import (ConditioningAttributes, SymbolicCondition)
 import librosa
 import numpy as np
+import json
 
 
 @dataclass
@@ -295,11 +296,11 @@ class JascoDataset(MusicDataset):
 
     def __getitem__(self, index):
         wav, music_info = super().__getitem__(index)
-        assert not wav.isinfinite().any(), f"inf detected in wav file: {music_info}"
+        assert wav.isfinite().all(), f"inf detected in wav file: {music_info}"
         wav = wav.float()
 
         # downcast music info to jasco info
-        jasco_info = JascoInfo({k: v for k, v in music_info.__dict__.items()})
+        jasco_info = JascoInfo(**{k: v for k, v in music_info.__dict__.items()})
 
         # get chords
         effective_segment_dur = (wav.shape[-1] / self.sample_rate) if \

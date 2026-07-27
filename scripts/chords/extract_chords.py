@@ -7,6 +7,8 @@ from chord_extractor import clear_conversion_cache, LabelledChordSequence  # typ
 import os
 from tqdm import tqdm
 
+completed = 0
+files_to_extract_from = []
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -24,6 +26,8 @@ def save_to_db_cb(tgt_dir: str):
     # along with the name of the original file and then run some logic here, e.g. to
     # save the latest data to DB
     def inner(results: LabelledChordSequence):
+        global completed, files_to_extract_from
+        completed += 1
         path = results.id.split(".wav")
 
         sequence = [(item.chord, item.timestamp) for item in results.sequence]
@@ -34,6 +38,8 @@ def save_to_db_cb(tgt_dir: str):
         else:
             file_idx = path[0].split("/")[-1]
             with open(f"{tgt_dir}/{file_idx}.chords", "wb") as f:
+                print(f"{completed / len(files_to_extract_from) * 100:.2f}%")
+                print(f"Finished {tgt_dir}/{file_idx}.chords")
                 # dump the object to the file
                 pickle.dump(sequence, f)
     return inner
@@ -44,7 +50,6 @@ if __name__ == "__main__":
     and saves the extracted chords to individual files in a target directory.'''
     print("parsed args")
     args = parse_args()
-    files_to_extract_from = list()
     with open(args.src_jsonl_file, "r") as json_file:
         for line in tqdm(json_file.readlines()):
             # fpath = json.loads(line.replace("\n", ""))['path']
@@ -66,8 +71,8 @@ if __name__ == "__main__":
     res = chordino.extract_many(
         files_to_extract_from,
         callback=save_to_db_cb(args.target_output_dir),
-        num_extractors=80,
-        num_preprocessors=80,
-        max_files_in_cache=400,
+        num_extractors=10,
+        num_preprocessors=10,
+        max_files_in_cache=40,
         stop_on_error=False,
     )

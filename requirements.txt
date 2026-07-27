@@ -1,5 +1,5 @@
 # please make sure you have already a pytorch install that is cuda enabled!
-av==11.0.0
+av>=13.0.0
 einops
 flashy>=0.0.1
 hydra-core>=1.1
@@ -8,12 +8,12 @@ julius
 num2words
 numpy<2.0.0
 sentencepiece
-spacy==3.7.6
+spacy==3.8.2
 torch==2.1.0
 torchaudio>=2.0.0,<2.1.2
 huggingface_hub
 tqdm
-transformers>=4.31.0  # need Encodec there.
+transformers>=4.31.0,<4.47.0  # need Encodec there.
 xformers<0.0.23
 demucs
 librosa
@@ -27,3 +27,4 @@ torchtext==0.16.0
 pesq
 pystoi
 torchdiffeq
+chord-extractor

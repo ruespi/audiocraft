@@ -16,7 +16,7 @@ transformer_lm:
   n_q: 8                   # number of streams to model
   card: 1024
   dropout: 0.
-  emb_lr: null
+#  emb_lr: null
   activation: gelu
   norm_first: false        # use pre-norm instead of post-norm
   bias_ff: true            # use bias for the feedforward
@@ -44,4 +44,4 @@ transformer_lm:
   qk_layer_norm_cross: false
   attention_dropout: null
   kv_repeat: 1
-  two_step_cfg: false          # whether to do true 2 steps CFG, potentially resolving some padding issues or not...
+#  two_step_cfg: false          # whether to do true 2 steps CFG, potentially resolving some padding issues or not...
